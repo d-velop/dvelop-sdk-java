@@ -5,9 +5,45 @@ the [Go Progamming Language](https://golang.org/).
 
 The project has beta status. **So for now expect things to change.** 
 
-## Installing
+## Usage
 
-TBD
+*For now, you'll have to check out this project from github and build/install locally. Were working on making these modules available via maven cental.*
+
+In your projects `pom.xml`, include the d.velop cloud sdk as a dependency:
+
+```xml
+<dependencies>
+    <dependency>
+        <groupId>com.d-velop.sdk</groupId>
+        <artifactId>dvelop-sdk-all</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </dependency>
+</dependencies>
+```
+
+Alternatively, you may include only the specific parts of the sdk you need:
+
+```xml
+<properties>
+    <version.dvelopsdk>1.0-SNAPSHOT</version.dvelopsdk>
+</properties>
+
+<dependencies>
+    <dependency>
+        <groupId>com.d-velop.sdk</groupId>
+        <artifactId>dvelop-sdk-tenant</artifactId>
+        <version>${version.dvelopsdk}</version>
+    </dependency>
+    
+    <dependency>
+        <groupId>com.d-velop.sdk</groupId>
+        <artifactId>dvelop-sdk-idp</artifactId>
+        <version>${version.dvelopsdk}</version>
+    </dependency>
+</dependencies>
+```
+
+More info on usage of sdk classes will come soon.
 
 ## Running the tests
 
