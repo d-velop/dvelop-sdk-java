@@ -1,6 +1,6 @@
 .idea
 target
-dvelop-sdk-java.iml
+*.iml
 
 # Compiled class file
 *.class
