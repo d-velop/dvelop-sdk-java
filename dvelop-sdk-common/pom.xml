@@ -9,8 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>dvelop-sdk-commons</artifactId>
-
+    <artifactId>dvelop-sdk-common</artifactId>
 
     <dependencies>
 
