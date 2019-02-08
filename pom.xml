@@ -10,6 +10,34 @@
 
     <packaging>pom</packaging>
 
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <contributors>
+        <contributor>
+            <name>Thorsten Lanfer</name>
+            <organization>d.velop AG</organization>
+            <organizationUrl>http://github.com/d-velop</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </contributor>
+
+        <contributor>
+            <name>Martin Testrot</name>
+            <organization>d.velop AG</organization>
+            <organizationUrl>http://github.com/d-velop</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </contributor>
+    </contributors>
+
     <modules>
         <module>dvelop-sdk-common</module>
         <module>dvelop-sdk-tenant</module>
@@ -26,19 +54,6 @@
         <version.hamcrest>1.3</version.hamcrest>
         <version.slf4j>1.7.25</version.slf4j>
     </properties>
-
-    <contributors>
-        <contributor>
-            <name>Thorsten Lanfer</name>
-            <email>tlanfer@gmail.com</email>
-            <organization>d.velop AG</organization>
-            <organizationUrl>http://github.com/d-velop</organizationUrl>
-            <roles>
-                <role>developer</role>
-            </roles>
-        </contributor>
-    </contributors>
-
 
     <dependencyManagement>
 
