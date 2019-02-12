@@ -12,6 +12,12 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
 
+/**
+ * The IDPAuthenticationFilter implements a jax-rs server filter to ensure that for resources annotated with
+ * {@link IDPRole}, the {@link IDPUser} given with {@link #setIDPIdentity } has that role. If the user does
+ * not have that role.
+ * Combine this with {@link IDPIdentityProviderFilter} to ensure the request contains a valid {@link IDPUser}.
+ */
 public class IDPAuthenticationFilter implements ContainerRequestFilter {
 
     private IDPUser identity;
@@ -55,7 +61,6 @@ public class IDPAuthenticationFilter implements ContainerRequestFilter {
             }
 
         }
-
 
         if (isRequestRedirectable(request)) {
             URI currentUri = request.getUriInfo().getRequestUri();

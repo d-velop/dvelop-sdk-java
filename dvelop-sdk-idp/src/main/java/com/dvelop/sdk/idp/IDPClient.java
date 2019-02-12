@@ -48,10 +48,18 @@ public class IDPClient {
         this.authSessionId = authSessionId;
     }
 
+    /**
+     * Calls the validate endpoint for this IDPClients authSessionId.
+     * See the IdentityproviderApp documentation for details on how to use "external validation".
+     *
+     * @param allowExternalValidation allow validation of external users in the IDP
+     * @return {@link IDPUser} if the current user is a valid idp user, null otherwise
+     */
     public IDPUser validate(boolean allowExternalValidation) {
         Response response = client.target(baseuri)
                 .path("identityprovider")
                 .path("validate")
+                .queryParam("allowExternalValidation", allowExternalValidation)
                 .request(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer "+authSessionId)
                 .get();
@@ -63,6 +71,12 @@ public class IDPClient {
         return response.readEntity(IDPUser.class);
     }
 
+    /**
+     * Calls the scim/users/{userId} endpoint for the given userId
+     *
+     * @param userId
+     * @return {@link IDPUser} if userId is valid, null otherwise
+     */
     public IDPUser getUserById(String userId) {
         Response response = client.target(baseuri)
                 .path("identityprovider")
