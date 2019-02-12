@@ -1,7 +1,7 @@
 # d.velop cloud SDK for Java
 
 This is the official SDK to build Apps for [d.velop cloud](https://www.d-velop.de/cloud/) using 
-the [Go Progamming Language](https://golang.org/).
+the Java programming language.
 
 The project has beta status. **So for now expect things to change.** 
 
