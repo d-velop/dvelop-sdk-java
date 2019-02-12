@@ -41,6 +41,7 @@
     <modules>
         <module>dvelop-sdk-common</module>
         <module>dvelop-sdk-tenant</module>
+        <module>dvelop-sdk-idp</module>
     </modules>
 
     <properties>
