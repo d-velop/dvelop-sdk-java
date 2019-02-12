@@ -31,7 +31,7 @@ You can file bug reports on the [issues page](https://github.com/d-velop/dvelop-
 
 Please follow the following steps prior to filing a bug report.
 
-1.  Search through existing [issues](https://github.com/d-velop/dvelop-sdk-go/issues) to ensure that 
+1.  Search through existing [issues](https://github.com/d-velop/dvelop-sdk-java/issues) to ensure that 
     your specific issue has not yet been reported.
 
 2.  Ensure that you have tested the latest version of this SDK. 
