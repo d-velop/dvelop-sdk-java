@@ -16,7 +16,7 @@
         <!-- Own stuff -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>dvelop-sdk-common</artifactId>
             <version>${project.version}</version>
         </dependency>
 
