@@ -27,12 +27,14 @@ public abstract class IDPIdentityProviderFilter implements ContainerRequestFilte
         String authorizationHeader = request.getHeaderString("Authorization");
         Cookie authSessionIdCookie = request.getCookies().get(AUTHSESSION_ID_COOKIE);
         IDPUser identity = null;
+        String authsessionId = "";
 
         if (authorizationHeader != null && authorizationHeader.startsWith(BEARER_HEADER)) {
             log.info("Using authorizationHeader "+authorizationHeader);
             String authSessionIdFromHeader = authorizationHeader.substring(BEARER_HEADER.length());
 
             if (authSessionIdFromHeader.length() > 0) {
+                authsessionId = authSessionIdFromHeader;
                 identity = validate(authSessionIdFromHeader);
 
             }
@@ -41,8 +43,14 @@ public abstract class IDPIdentityProviderFilter implements ContainerRequestFilte
             String authSessionIdFromCookie = authSessionIdCookie.getValue();
             if (authSessionIdFromCookie.length() > 0) {
                 String authSessionIdDecoded = URLDecoder.decode(authSessionIdFromCookie, StandardCharsets.UTF_8.name());
+
+                authsessionId = authSessionIdDecoded;
                 identity = validate(authSessionIdDecoded);
             }
+        }
+
+        if (!"".equals(authsessionId)){
+            setIDPAuthsessionId(authsessionId);
         }
 
         setIDPIdentity(identity);
@@ -53,6 +61,8 @@ public abstract class IDPIdentityProviderFilter implements ContainerRequestFilte
     }
 
     public abstract void setIDPIdentity(IDPUser identity);
+
+    public abstract void setIDPAuthsessionId( String authsessionId);
 
     private IDPUser validate(String authSessionId) {
         IDPClient idpClient = new IDPClient(baseUri, authSessionId);
