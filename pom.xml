@@ -130,13 +130,12 @@
 
     <profiles>
         <profile>
-            <id>default</id>
+            <id>sign</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>performRelease</name>
+                </property>
             </activation>
-        </profile>
-        <profile>
-            <id>release</id>
             <build>
                 <plugins>
                     <plugin>
@@ -148,7 +147,6 @@
                                 <arg>--batch</arg>
                                 <arg>--yes</arg>
                             </gpgArguments>
-                            <homedir>/gnupg</homedir>
                         </configuration>
                         <executions>
                             <execution>
@@ -166,16 +164,6 @@
     </profiles>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <configuration>
-                    <releaseProfiles>release</releaseProfiles>
-                </configuration>
-            </plugin>
-        </plugins>
-
         <pluginManagement>
             <plugins>
                 <plugin>
