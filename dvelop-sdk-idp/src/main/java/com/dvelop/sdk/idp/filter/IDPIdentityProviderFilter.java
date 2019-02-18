@@ -1,6 +1,7 @@
 package com.dvelop.sdk.idp.filter;
 
 import com.dvelop.sdk.idp.IDPClient;
+import com.dvelop.sdk.idp.IDPConstants;
 import com.dvelop.sdk.idp.dto.IDPUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,11 +13,39 @@ import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * A base class to interpret authentication headers of the d.velop identity provider
+ * Implement this abstract class and add it to your jax-rs pipeline, use the {@link #setIDPIdentity} and
+ * {@link #setIDPAuthsessionId} methods to store the current user for this request somewhere.
+ * Ensure to set the baseUri before delegating the {@link #filter} method.
+ *
+ * <pre>
+ * @Provider
+ * @PreMatching
+ * public class InjectableIDPIdentityProviderFilter extends IDPIdentityProviderFilter {
+ *
+ *     @Override
+ *     public void filter(ContainerRequestContext request){
+ *         setBaseUri("https://some.where"); // get this from somewhere sensible
+ *         super.filter(request);
+ *     }
+ *
+ *     @Override
+ *     public void setIDPIdentity(IDPUser s){
+ *         System.out.println("User is "+s);
+ *     }
+ *
+ *     @Override
+ *     public void setIDPAuthsessionId(String s){
+ *         System.out.println("AuthsessionId is "+s);
+ *     }
+ * }
+ * </pre>
+ */
 public abstract class IDPIdentityProviderFilter implements ContainerRequestFilter {
 
     Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private static final String BEARER_HEADER = "Bearer ";
     private static final String AUTHSESSION_ID_COOKIE = "AuthSessionId";
 
     private String baseUri;
@@ -29,9 +58,9 @@ public abstract class IDPIdentityProviderFilter implements ContainerRequestFilte
         IDPUser identity = null;
         String authsessionId = "";
 
-        if (authorizationHeader != null && authorizationHeader.startsWith(BEARER_HEADER)) {
+        if (authorizationHeader != null && authorizationHeader.startsWith(IDPConstants.BEARER_HEADER_PREFIX)) {
             log.info("Using authorizationHeader "+authorizationHeader);
-            String authSessionIdFromHeader = authorizationHeader.substring(BEARER_HEADER.length());
+            String authSessionIdFromHeader = authorizationHeader.substring(IDPConstants.BEARER_HEADER_PREFIX.length());
 
             if (authSessionIdFromHeader.length() > 0) {
                 authsessionId = authSessionIdFromHeader;

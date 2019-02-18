@@ -13,6 +13,38 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
+/**
+ * A base class to interpret tenant header of the d.velop multitenancy model.
+ * Implement this abstract class and add it to your jax-rs pipeline, to have it verify the signature (x-dv-sig-1) and
+ * reject the request with a status 403 if the signature does not match. Use the {@link #setBaseUri(String)} and
+ * {@link #setTenantId(String)} methods to store the values of x-dv-baseuri and x-dv-tenant-id for this request
+ * somewhere.
+ * Ensure this filter is called before any other filter, for example using the {@link javax.ws.rs.container.PreMatching}
+ * annotation.
+ *
+ * <pre>
+ * @Provider
+ * @PreMatching
+ * public class InjectableTenantFilter extends TenantFilter {
+ *     @Override
+ *     public void filter(ContainerRequestContext request){
+ *         setSignatureSecret(someBytes);
+ *         super.filter(request);
+ *     }
+ *
+ *     @Override
+ *     public void setTenantId(String s){
+ *         System.out.println("Tenant id is "+s);
+ *     }
+ *
+ *     @Override
+ *     public void setBaseUri(String s){
+ *         System.out.println("Baseuri is "+s);
+ *     }
+ * }
+ * </pre>
+ *
+ */
 public abstract class TenantFilter implements ContainerRequestFilter {
     String HMAC_SIGNATURE_ALGORITHM = "HmacSHA256";
 
