@@ -74,7 +74,7 @@ public class IDPClient {
     /**
      * Calls the scim/users/{userId} endpoint for the given userId
      *
-     * @param userId
+     * @param userId idp id of the user to retrieve
      * @return {@link IDPUser} if userId is valid, null otherwise
      */
     public IDPUser getUserById(String userId) {
