@@ -23,21 +23,17 @@ import java.util.Base64;
  * annotation.
  *
  * <pre>
- * @Provider
- * @PreMatching
  * public class InjectableTenantFilter extends TenantFilter {
- *     @Override
+ *
  *     public void filter(ContainerRequestContext request){
  *         setSignatureSecret(someBytes);
  *         super.filter(request);
  *     }
  *
- *     @Override
  *     public void setTenantId(String s){
  *         System.out.println("Tenant id is "+s);
  *     }
  *
- *     @Override
  *     public void setBaseUri(String s){
  *         System.out.println("Baseuri is "+s);
  *     }

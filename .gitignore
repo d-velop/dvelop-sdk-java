@@ -2,6 +2,8 @@
 target
 *.iml
 
+release.properties
+
 # Compiled class file
 *.class
 

@@ -20,22 +20,17 @@ import java.nio.charset.StandardCharsets;
  * Ensure to set the baseUri before delegating the {@link #filter} method.
  *
  * <pre>
- * @Provider
- * @PreMatching
  * public class InjectableIDPIdentityProviderFilter extends IDPIdentityProviderFilter {
  *
- *     @Override
  *     public void filter(ContainerRequestContext request){
  *         setBaseUri("https://some.where"); // get this from somewhere sensible
  *         super.filter(request);
  *     }
  *
- *     @Override
  *     public void setIDPIdentity(IDPUser s){
  *         System.out.println("User is "+s);
  *     }
  *
- *     @Override
  *     public void setIDPAuthsessionId(String s){
  *         System.out.println("AuthsessionId is "+s);
  *     }
