@@ -6,9 +6,13 @@
 
     <groupId>com.d-velop.sdk</groupId>
     <artifactId>dvelop-sdk</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
+
+    <name>dvelop-sdk</name>
+    <url>https://github.com/d-velop</url>
+    <description>d.velop cloud sdk for java</description>
 
     <licenses>
         <license>
@@ -37,6 +41,18 @@
             </roles>
         </contributor>
     </contributors>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
 
     <modules>
         <module>dvelop-sdk-common</module>
