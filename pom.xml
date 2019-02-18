@@ -20,25 +20,20 @@
         </license>
     </licenses>
 
-    <contributors>
-        <contributor>
+    <developers>
+        <developer>
             <name>Thorsten Lanfer</name>
+            <email>thorsten.lanfer@d-velop.de</email>
             <organization>d.velop AG</organization>
-            <organizationUrl>http://github.com/d-velop</organizationUrl>
-            <roles>
-                <role>developer</role>
-            </roles>
-        </contributor>
-
-        <contributor>
+            <organizationUrl>http://www.d-velop.com</organizationUrl>
+        </developer>
+        <developer>
             <name>Martin Testrot</name>
+            <email>martin.testrot@d-velop.de</email>
             <organization>d.velop AG</organization>
-            <organizationUrl>http://github.com/d-velop</organizationUrl>
-            <roles>
-                <role>developer</role>
-            </roles>
-        </contributor>
-    </contributors>
+            <organizationUrl>http://www.d-velop.com</organizationUrl>
+        </developer>
+    </developers>
 
     <scm>
         <connection>scm:git:https://github.com/d-velop/dvelop-sdk-java.git</connection>
