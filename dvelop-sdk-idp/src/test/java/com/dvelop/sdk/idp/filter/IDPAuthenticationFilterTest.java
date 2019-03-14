@@ -55,13 +55,13 @@ class IDPAuthenticationFilterTest {
         when(request.getUriInfo()).thenReturn(uriInfo);
     }
 
-    void setupRequestDefaults( String method, String uri, String acceptHeader) throws URISyntaxException {
+    void setupRequestDefaults( String method, String uriPathAndQuery, String acceptHeader) throws URISyntaxException {
         when(request.getMethod()).thenReturn(method);
         when(request.getHeaderString("Authorization")).thenReturn(null);
         when(request.getCookies()).thenReturn(new HashMap<>());
         when(request.getHeaderString("accept")).thenReturn(acceptHeader);
         when(request.getAcceptableMediaTypes()).thenReturn( Arrays.asList( MediaType.valueOf(acceptHeader)));
-        when(uriInfo.getRequestUri()).thenReturn(new URI(uri));
+        when(uriInfo.getRequestUri()).thenReturn(new URI("http://localhost" + uriPathAndQuery));
     }
 
     @ParameterizedTest
@@ -81,7 +81,28 @@ class IDPAuthenticationFilterTest {
         verify(request).abortWith(captor.capture());
         assertThat(captor.getValue(), allOf(
                 hasProperty("status", is(302)),
-                hasProperty("headers", hasEntry(is("Location"), hasItem(containsString("/identityprovider/login?redirect=%2Fmyresource%2Fsubresource%3Fquery1%3Dabc%26query2%3D123"))))
+                hasProperty("headers", hasEntry(is("Location"), hasItem(is("/identityprovider/login?redirect=%2Fmyresource%2Fsubresource%3Fquery1%3Dabc%26query2%3D123"))))
+        ));
+
+    }
+
+    @Test
+    void redirectableRequestWithoutAuthorizationInfoWithoutQueryPart_redirectsToIdp() throws Exception {
+        setupRequestDefaults(
+                "get",
+                "/myresource/subresource",
+                "text/html"
+        );
+
+        ArgumentCaptor<Response> captor = ArgumentCaptor.forClass(Response.class);
+
+        authenticationFilter.resourceInfo = makeMockResourceInfo(MockResourceWithRoleInternal.class, "");
+        authenticationFilter.filter(request);
+
+        verify(request).abortWith(captor.capture());
+        assertThat(captor.getValue(), allOf(
+                hasProperty("status", is(302)),
+                hasProperty("headers", hasEntry(is("Location"), hasItem(is("/identityprovider/login?redirect=%2Fmyresource%2Fsubresource"))))
         ));
 
     }
