@@ -9,6 +9,7 @@ import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
 
@@ -65,7 +66,8 @@ public class IDPAuthenticationFilter implements ContainerRequestFilter {
         if (isRequestRedirectable(request)) {
             URI currentUri = request.getUriInfo().getRequestUri();
 
-            String encoded = URLEncoder.encode(currentUri.toString(), "ascii");
+            String encoded = getEncodedPathAndQuery(currentUri);
+
             String redirectUri = "/identityprovider/login?redirect=" + encoded;
 
             Response redirect = Response
@@ -79,6 +81,15 @@ public class IDPAuthenticationFilter implements ContainerRequestFilter {
                     .build();
             request.abortWith(redirect);
         }
+    }
+
+    private String getEncodedPathAndQuery(URI currentUri) throws UnsupportedEncodingException {
+        String decoded = isQueryPresent(currentUri) ? currentUri.getPath() + "?" + currentUri.getQuery() : currentUri.getPath();
+        return URLEncoder.encode(decoded, "ascii");
+    }
+
+    private boolean isQueryPresent(URI currentUri) {
+        return currentUri.getQuery() != null && !currentUri.getQuery().isEmpty();
     }
 
     private boolean isRequestRedirectable(ContainerRequestContext request) {
