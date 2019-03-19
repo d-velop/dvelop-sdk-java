@@ -16,7 +16,7 @@ In your projects `pom.xml`, include the d.velop cloud sdk as a dependency:
     <dependency>
         <groupId>com.d-velop.sdk</groupId>
         <artifactId>dvelop-sdk-all</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>0.1.5</version>
     </dependency>
 </dependencies>
 ```
@@ -25,7 +25,7 @@ Alternatively, you may include only the specific parts of the sdk you need:
 
 ```xml
 <properties>
-    <version.dvelopsdk>1.0-SNAPSHOT</version.dvelopsdk>
+    <version.dvelopsdk>0.1.5</version.dvelopsdk>
 </properties>
 
 <dependencies>
@@ -47,7 +47,7 @@ More info on usage of sdk classes will come soon.
 
 ## Running the tests
 
-TBD
+Tests are run using [maven surefire](https://maven.apache.org) 
 
 ## Contributing
 
