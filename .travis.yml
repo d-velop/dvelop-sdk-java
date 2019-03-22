@@ -9,5 +9,5 @@ deploy:
   script: ./travis/deploy.sh
   skip_cleanup: true
   on:
-    repo: d-velop/dvelop-sdk-java
-    branch: release
+    all_branches: true
+    condition: $TRAVIS_TAG =~ ^dvelop-sdk-[0-9]+\.[0-9]+\.[0-9]+
