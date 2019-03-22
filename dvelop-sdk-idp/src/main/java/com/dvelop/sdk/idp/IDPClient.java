@@ -6,6 +6,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Optional;
 
 
 public class IDPClient {
@@ -68,7 +69,9 @@ public class IDPClient {
             return null;
         }
 
-        return response.readEntity(IDPUser.class);
+        IDPUser idpUser = response.readEntity(IDPUser.class);
+        idpUser.setAuthSessionId(Optional.of(authSessionId));
+        return idpUser;
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.dvelop.sdk.idp.filter;
+package com.dvelop.sdk.idp.validation;
 
 import com.dvelop.sdk.idp.dto.IDPUser;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +28,7 @@ import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 class IDPAuthenticationFilterTest {
@@ -41,7 +42,6 @@ class IDPAuthenticationFilterTest {
     @Mock
     UriInfo uriInfo;
 
-    IDPAuthenticationFilter authenticationFilter;
 
     public static String GROUP_ID_ADMIN_TENANT = "6DB690CB-EA1B-4D45-B00B-63A2E7B21816";
     public static String GROUP_ID_EXTERNAL_USER = "3E093BE5-CCCE-435D-99F8-544656B98681";
@@ -49,9 +49,6 @@ class IDPAuthenticationFilterTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        authenticationFilter = new IDPAuthenticationFilter();
-
-
         when(request.getUriInfo()).thenReturn(uriInfo);
     }
 
@@ -75,8 +72,8 @@ class IDPAuthenticationFilterTest {
 
         ArgumentCaptor<Response> captor = ArgumentCaptor.forClass(Response.class);
 
-        authenticationFilter.resourceInfo = makeMockResourceInfo(MockResourceWithRoleInternal.class, "");
-        authenticationFilter.filter(request);
+        ResourceInfo resourceInfo =  makeMockResourceInfo(MockResourceWithRoleInternal.class, "");
+        IDPRoleValidator.validate(request, null, resourceInfo);
 
         verify(request).abortWith(captor.capture());
         assertThat(captor.getValue(), allOf(
@@ -96,8 +93,8 @@ class IDPAuthenticationFilterTest {
 
         ArgumentCaptor<Response> captor = ArgumentCaptor.forClass(Response.class);
 
-        authenticationFilter.resourceInfo = makeMockResourceInfo(MockResourceWithRoleInternal.class, "");
-        authenticationFilter.filter(request);
+        ResourceInfo resourceInfo = makeMockResourceInfo(MockResourceWithRoleInternal.class, "");
+        IDPRoleValidator.validate(request, null, resourceInfo);
 
         verify(request).abortWith(captor.capture());
         assertThat(captor.getValue(), allOf(
@@ -114,8 +111,8 @@ class IDPAuthenticationFilterTest {
         when(request.getHeaderString("Authorization")).thenReturn(null);
         when(request.getCookies()).thenReturn(new HashMap<>());
 
-        authenticationFilter.resourceInfo = makeMockResourceInfo(MockResourceWithRoleInternal.class, "");
-        authenticationFilter.filter(request);
+        ResourceInfo resourceInfo = makeMockResourceInfo(MockResourceWithRoleInternal.class, "");
+        IDPRoleValidator.validate(request, null, resourceInfo);
 
         ArgumentCaptor<Response> captor = ArgumentCaptor.forClass(Response.class);
         verify(request).abortWith(captor.capture());
@@ -132,8 +129,8 @@ class IDPAuthenticationFilterTest {
         when(request.getHeaderString("Authorization")).thenReturn(null);
         when(request.getCookies()).thenReturn(new HashMap<>());
 
-        authenticationFilter.resourceInfo = makeMockResourceInfo(MockResourceWithRoleInternal.class, "");
-        authenticationFilter.filter(request);
+        ResourceInfo resourceInfo = makeMockResourceInfo(MockResourceWithRoleInternal.class, "");
+        IDPRoleValidator.validate(request, null, resourceInfo);
 
         ArgumentCaptor<Response> captor = ArgumentCaptor.forClass(Response.class);
         verify(request).abortWith(captor.capture());
@@ -152,8 +149,8 @@ class IDPAuthenticationFilterTest {
         when(request.getHeaderString("Authorization")).thenReturn(null);
         when(request.getCookies()).thenReturn(new HashMap<>());
 
-        authenticationFilter.resourceInfo = makeMockResourceInfo(MockResourceWithRoleInternal.class, "");
-        authenticationFilter.filter(request);
+        ResourceInfo resourceInfo = makeMockResourceInfo(MockResourceWithRoleInternal.class, "");
+        IDPRoleValidator.validate(request, null, resourceInfo);
 
         ArgumentCaptor<Response> captor = ArgumentCaptor.forClass(Response.class);
         verify(request).abortWith(captor.capture());
@@ -162,16 +159,16 @@ class IDPAuthenticationFilterTest {
 
     @Test
     void resourceHasNoAnnotations_doesNotInterfere() throws Exception {
-        authenticationFilter.resourceInfo = makeMockResourceInfo(MockResourceWithNoAnnotation.class, "toString");
-        authenticationFilter.filter(request);
+        ResourceInfo resourceInfo = makeMockResourceInfo(MockResourceWithNoAnnotation.class, "toString");
+        IDPRoleValidator.validate(request, identity, resourceInfo);
 
         verify(request, never()).abortWith(any());
     }
 
     @Test
     void resourceClassRoleIsAnonymous_doesNotValidate() throws Exception {
-        authenticationFilter.resourceInfo = makeMockResourceInfo(MockResourceWithRoleAnonymous.class, "MockMethodWithNoAnnotation");
-        authenticationFilter.filter(request);
+        ResourceInfo resourceInfo = makeMockResourceInfo(MockResourceWithRoleAnonymous.class, "MockMethodWithNoAnnotation");
+        IDPRoleValidator.validate(request, null, resourceInfo);
 
         ArgumentCaptor<Response> captor = ArgumentCaptor.forClass(Response.class);
         verify(request, never()).abortWith(any());
@@ -182,9 +179,8 @@ class IDPAuthenticationFilterTest {
         setupRequestDefaults("get", "/some/where", "text/html");
         when(identity.isExternal()).thenReturn(true);
 
-        authenticationFilter.setIDPIdentity(identity);
-        authenticationFilter.resourceInfo = makeMockResourceInfo(MockResourceWithRoleExternal.class, "MockMethodWithNoAnnotation");
-        authenticationFilter.filter(request);
+        ResourceInfo resourceInfo = makeMockResourceInfo(MockResourceWithRoleExternal.class, "MockMethodWithNoAnnotation");
+        IDPRoleValidator.validate(request, identity, resourceInfo);
 
         verify(identity).isExternal();
         verify(request, never()).abortWith(any());
@@ -195,9 +191,8 @@ class IDPAuthenticationFilterTest {
         setupRequestDefaults("get", "/some/where", "text/html");
         when(identity.isExternal()).thenReturn(false);
 
-        authenticationFilter.setIDPIdentity(identity);
-        authenticationFilter.resourceInfo = makeMockResourceInfo(MockResourceWithRoleInternal.class, "MockMethodWithNoAnnotation");
-        authenticationFilter.filter(request);
+        ResourceInfo resourceInfo = makeMockResourceInfo(MockResourceWithRoleInternal.class, "MockMethodWithNoAnnotation");
+        IDPRoleValidator.validate(request, identity, resourceInfo);
 
         verify(request, never()).abortWith(any());
     }
@@ -207,9 +202,8 @@ class IDPAuthenticationFilterTest {
         setupRequestDefaults("get", "/some/where", "text/html");
         when(identity.isUserInGroup(anyString())).thenReturn(true);
 
-        authenticationFilter.setIDPIdentity(identity);
-        authenticationFilter.resourceInfo = makeMockResourceInfo(MockResourceWithRoleAdminTenant.class, "MockMethodWithNoAnnotation");
-        authenticationFilter.filter(request);
+        ResourceInfo resourceInfo = makeMockResourceInfo(MockResourceWithRoleAdminTenant.class, "MockMethodWithNoAnnotation");
+        IDPRoleValidator.validate(request, identity, resourceInfo);
 
         ArgumentCaptor<Response> captor = ArgumentCaptor.forClass(Response.class);
 
@@ -219,8 +213,8 @@ class IDPAuthenticationFilterTest {
 
     @Test
     void resourceMethodRoleIsAnonymous_doesNotValidate() throws Exception {
-        authenticationFilter.resourceInfo = makeMockResourceInfo(MockClass.class, "MockMethodWithRoleAnonymous");
-        authenticationFilter.filter(request);
+        ResourceInfo resourceInfo = makeMockResourceInfo(MockClass.class, "MockMethodWithRoleAnonymous");
+        IDPRoleValidator.validate(request, null, resourceInfo);
 
         ArgumentCaptor<Response> captor = ArgumentCaptor.forClass(Response.class);
         verify(request, never()).abortWith(any());
@@ -231,9 +225,8 @@ class IDPAuthenticationFilterTest {
         setupRequestDefaults("get", "/some/where", "text/html");
         when(identity.isExternal()).thenReturn(true);
 
-        authenticationFilter.setIDPIdentity(identity);
-        authenticationFilter.resourceInfo = makeMockResourceInfo(MockClass.class, "MockMethodWithRoleExternal");
-        authenticationFilter.filter(request);
+        ResourceInfo resourceInfo = makeMockResourceInfo(MockClass.class, "MockMethodWithRoleExternal");
+        IDPRoleValidator.validate(request, identity, resourceInfo);
 
         verify(request, never()).abortWith(any());
     }
@@ -243,9 +236,8 @@ class IDPAuthenticationFilterTest {
         setupRequestDefaults("get", "/some/where", "text/html");
         when(identity.isExternal()).thenReturn(false);
 
-        authenticationFilter.setIDPIdentity(identity);
-        authenticationFilter.resourceInfo = makeMockResourceInfo(MockClass.class, "MockMethodWithRoleInternal");
-        authenticationFilter.filter(request);
+        ResourceInfo resourceInfo = makeMockResourceInfo(MockClass.class, "MockMethodWithRoleInternal");
+        IDPRoleValidator.validate(request, identity, resourceInfo);
 
         verify(request, never()).abortWith(any());
     }
@@ -255,17 +247,16 @@ class IDPAuthenticationFilterTest {
         setupRequestDefaults("get", "/some/where", "text/html");
         when(identity.isUserInGroup(GROUP_ID_ADMIN_TENANT)).thenReturn(true);
 
-        authenticationFilter.setIDPIdentity(identity);
-        authenticationFilter.resourceInfo = makeMockResourceInfo(MockClass.class, "MockMethodWithRoleAdminTenant");
-        authenticationFilter.filter(request);
+        ResourceInfo resourceInfo = makeMockResourceInfo(MockClass.class, "MockMethodWithRoleAdminTenant");
+        IDPRoleValidator.validate(request, identity, resourceInfo);
 
         verify(request, never()).abortWith(any());
     }
 
     @Test
     void resourceClassAndMethodHaveAnnotations_prefersMethodAnnotation() throws Exception {
-        authenticationFilter.resourceInfo = makeMockResourceInfo(MockResourceWithRoleInternal.class, "MockMethodWithRoleAnonymous");
-        authenticationFilter.filter(request);
+        ResourceInfo resourceInfo = makeMockResourceInfo(MockResourceWithRoleInternal.class, "MockMethodWithRoleAnonymous");
+        IDPRoleValidator.validate(request, null, resourceInfo);
 
         ArgumentCaptor<Response> captor = ArgumentCaptor.forClass(Response.class);
         verify(request, never()).abortWith(any());

@@ -1,4 +1,4 @@
-package com.dvelop.sdk.idp.filter;
+package com.dvelop.sdk.idp.validation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

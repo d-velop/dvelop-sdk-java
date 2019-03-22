@@ -1,33 +1,18 @@
-package com.dvelop.sdk.idp.filter;
+package com.dvelop.sdk.idp.validation;
 
 import com.dvelop.sdk.idp.IDPConstants;
 import com.dvelop.sdk.idp.dto.IDPUser;
 
 import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
 
-/**
- * The IDPAuthenticationFilter implements a jax-rs server filter to ensure that for resources annotated with
- * {@link IDPRole}, the {@link IDPUser} given with {@link #setIDPIdentity } has that role. If the user does
- * not have that role.
- * Combine this with {@link IDPIdentityProviderFilter} to ensure the request contains a valid {@link IDPUser}.
- */
-public class IDPAuthenticationFilter implements ContainerRequestFilter {
+public class IDPRoleValidator {
 
-    private IDPUser identity;
-
-    @Context
-    ResourceInfo resourceInfo;
-
-    @Override
-    public void filter(ContainerRequestContext request) throws IOException {
+    public static void validate(ContainerRequestContext request, IDPUser identity, ResourceInfo resourceInfo) throws UnsupportedEncodingException {
 
         IDPRole.IDPRoles role = IDPRole.IDPRoles.ANONYMOUS;
 
@@ -41,7 +26,7 @@ public class IDPAuthenticationFilter implements ContainerRequestFilter {
             role = annotationOnMethod.value();
         }
 
-        if(role == IDPRole.IDPRoles.ANONYMOUS){
+        if (role == IDPRole.IDPRoles.ANONYMOUS) {
             return;
         }
 
@@ -49,15 +34,15 @@ public class IDPAuthenticationFilter implements ContainerRequestFilter {
 
         if (identity != null) {
 
-            if( role == IDPRole.IDPRoles.ADMIN_TENANT && identity.isUserInGroup(IDPConstants.GROUP_ID_ADMIN_TENANT)) {
+            if (role == IDPRole.IDPRoles.ADMIN_TENANT && identity.isUserInGroup(IDPConstants.GROUP_ID_ADMIN_TENANT)) {
                 return;
             }
 
-            if( role == IDPRole.IDPRoles.USER_INTERNAL && !identity.isExternal()){
+            if (role == IDPRole.IDPRoles.USER_INTERNAL && !identity.isExternal()) {
                 return;
             }
 
-            if( role == IDPRole.IDPRoles.USER_EXTERNAL && identity.isExternal()){
+            if (role == IDPRole.IDPRoles.USER_EXTERNAL && identity.isExternal()) {
                 return;
             }
 
@@ -81,18 +66,19 @@ public class IDPAuthenticationFilter implements ContainerRequestFilter {
                     .build();
             request.abortWith(redirect);
         }
+
     }
 
-    private String getEncodedPathAndQuery(URI currentUri) throws UnsupportedEncodingException {
+    private static String getEncodedPathAndQuery(URI currentUri) throws UnsupportedEncodingException {
         String decoded = isQueryPresent(currentUri) ? currentUri.getPath() + "?" + currentUri.getQuery() : currentUri.getPath();
         return URLEncoder.encode(decoded, "ascii");
     }
 
-    private boolean isQueryPresent(URI currentUri) {
+    private static boolean isQueryPresent(URI currentUri) {
         return currentUri.getQuery() != null && !currentUri.getQuery().isEmpty();
     }
 
-    private boolean isRequestRedirectable(ContainerRequestContext request) {
+    private static boolean isRequestRedirectable(ContainerRequestContext request) {
 
         switch (request.getMethod().toLowerCase()) {
             case "post":
@@ -104,9 +90,4 @@ public class IDPAuthenticationFilter implements ContainerRequestFilter {
 
         return request.getAcceptableMediaTypes().stream().anyMatch(mediaType -> mediaType.toString().equals("text/html"));
     }
-
-    public void setIDPIdentity(IDPUser identity){
-        this.identity = identity;
-    };
-
 }

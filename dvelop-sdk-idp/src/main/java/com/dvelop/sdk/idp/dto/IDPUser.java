@@ -3,6 +3,7 @@ package com.dvelop.sdk.idp.dto;
 import com.dvelop.sdk.idp.IDPConstants;
 
 import java.util.List;
+import java.util.Optional;
 
 public class IDPUser {
 
@@ -28,6 +29,16 @@ public class IDPUser {
 
     String id;
     String userName;
+
+    public Optional<String> getAuthSessionId() {
+        return authSessionId;
+    }
+
+    public void setAuthSessionId(Optional<String> authSessionId) {
+        this.authSessionId = authSessionId;
+    }
+
+    Optional<String> authSessionId = Optional.empty();
 
     Name name;
     String displayName;
@@ -96,8 +107,8 @@ public class IDPUser {
         return isUserInGroup(IDPConstants.GROUP_ID_EXTERNAL_USER);
     }
 
-    public boolean isUserInGroup( String groupId){
-        return groups.stream().anyMatch( g -> g.getValue() == groupId );
+    public boolean isUserInGroup(String groupId) {
+        return groups.stream().anyMatch(g -> g.getValue() == groupId);
     }
 
 }
