@@ -205,7 +205,6 @@
                     </executions>
                 </plugin>
 
-
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
@@ -215,11 +214,6 @@
                             <goals>
                                 <goal>jar</goal>
                             </goals>
-                            <configuration>
-                                <additionalJOptions>
-                                    <additionalJOption>-html5</additionalJOption>
-                                </additionalJOptions>
-                            </configuration>
                         </execution>
                     </executions>
                 </plugin>
