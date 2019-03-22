@@ -1,0 +1,13 @@
+language: java
+jdk:
+ - openjdk8
+cache:
+  directories:
+    - $HOME/.m2
+deploy:
+  provider: script
+  script: ./travis/deploy.sh
+  skip_cleanup: true
+  on:
+    all_branches: true
+    condition: $TRAVIS_TAG =~ ^dvelop-sdk-[0-9]+\.[0-9]+\.[0-9]+
