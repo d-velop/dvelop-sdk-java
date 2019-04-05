@@ -33,24 +33,41 @@ import static org.hamcrest.Matchers.*;
 	}
 
 	@Test
-	public void isUserInGroupWithValidGroup() {
-		setTestGroups();
+	public void isUserInGroupWithValidGroupAndStringLiterals() {
+		setTestGroupsAsStringLiterals();
 		assertThat(idpUser.isUserInGroup("groupId2"), is(true));
 	}
 
 	@Test
 	public void isUserInGroupWithInvalidGroup() {
-		setTestGroups();
+		setTestGroupsAsStringLiterals();
 		assertThat(idpUser.isUserInGroup("groupId3"), is(false));
 	}
 
-	private void setTestGroups() {
+	@Test
+	public void isUserInGroupWithValidGroupAndStringObjects() {
+		setTestGroupsAsObjects();
+		assertThat(idpUser.isUserInGroup("groupId2"), is(true));
+	}
+
+	private void setTestGroupsAsStringLiterals() {
 		List<DisplayValue> groups = new ArrayList<>();
 		DisplayValue group = new DisplayValue();
 		group.setValue("groupId1");
 		groups.add(group);
 		group = new DisplayValue();
 		group.setValue("groupId2");
+		groups.add(group);
+		idpUser.setGroups(groups);
+	}
+
+	private void setTestGroupsAsObjects() {
+		List<DisplayValue> groups = new ArrayList<>();
+		DisplayValue group = new DisplayValue();
+		group.setValue(new String ("groupId1"));
+		groups.add(group);
+		group = new DisplayValue();
+		group.setValue(new String("groupId2"));
 		groups.add(group);
 		idpUser.setGroups(groups);
 	}
