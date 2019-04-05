@@ -108,7 +108,7 @@ public class IDPUser {
     }
 
     public boolean isUserInGroup(String groupId) {
-        return groups.stream().anyMatch(g -> g.getValue() == groupId);
+        return groups == null ? false : groups.stream().anyMatch(g -> g.getValue().equals(groupId));
     }
 
 }
