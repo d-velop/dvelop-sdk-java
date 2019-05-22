@@ -7,7 +7,7 @@
         <version>0.2.3-SNAPSHOT</version>
     </parent>
 
-    <artifactId>dvelop-sdk-idp</artifactId>
+    <artifactId>dvelop-sdk-dms</artifactId>
 
     <build>
         <plugins>
@@ -31,7 +31,6 @@
             </plugin>
         </plugins>
     </build>
-
 
     <dependencies>
 

@@ -4,7 +4,7 @@
 
     <groupId>com.d-velop.sdk</groupId>
     <artifactId>dvelop-sdk</artifactId>
-    <version>0.2.2</version>
+    <version>0.2.3-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -55,6 +55,7 @@
         <module>dvelop-sdk-tenant</module>
         <module>dvelop-sdk-idp</module>
         <module>dvelop-sdk-all</module>
+        <module>dvelop-sdk-dms</module>
     </modules>
 
     <properties>
