@@ -9,6 +9,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.ws.rs.container.ContainerRequestContext;
 import java.nio.charset.Charset;
 import java.security.InvalidKeyException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
@@ -70,7 +71,12 @@ public class TenantHeaderValidator {
             throw new TenantHeaderValidationFailedException("failed to calculare expected signature: " + e.getMessage(), true);
         }
 
-        if (!expectedSignature.equals(givenSignature)) {
+        if(givenSignature == null) {
+            logger.warn("Invalid signature {}", givenSignature);
+            throw new TenantHeaderValidationFailedException("received invalid signature", false);
+        }
+
+        if (!MessageDigest.isEqual(Base64.getDecoder().decode(expectedSignature), Base64.getDecoder().decode(givenSignature))) {
             logger.warn("Invalid signature {}", givenSignature);
             throw new TenantHeaderValidationFailedException("received invalid signature", false);
         }
