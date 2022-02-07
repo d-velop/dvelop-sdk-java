@@ -1,9 +1,11 @@
-# d.velop cloud SDK for Java
+# DEPRECATED: d.velop cloud SDK for Java
 
-This is the official SDK to build Apps for [d.velop cloud](https://www.d-velop.de/cloud/) using 
+<div align=center>
+<img alt="No Maintenance" src="https://img.shields.io/maintenance/no/2022?style=for-the-badge">
+</div>
+
+This is the official SDK to build Apps for [d.velop cloud](https://www.d-velop.de/cloud/) using
 the Java programming language.
-
-The project has beta status. **So for now expect things to change.** 
 
 ## Usage
 
@@ -34,7 +36,7 @@ Alternatively, you may include only the specific parts of the sdk you need:
         <artifactId>dvelop-sdk-tenant</artifactId>
         <version>${version.dvelopsdk}</version>
     </dependency>
-    
+
     <dependency>
         <groupId>com.d-velop.sdk</groupId>
         <artifactId>dvelop-sdk-idp</artifactId>
@@ -47,7 +49,7 @@ More info on usage of sdk classes will come soon.
 
 ## Running the tests
 
-Tests are run using [maven surefire](https://maven.apache.org) 
+Tests are run using [maven surefire](https://maven.apache.org)
 
 ## Contributing
 
@@ -56,8 +58,8 @@ and the process for submitting pull requests to us.
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see 
-the [releases on this repository](https://github.com/d-velop/dvelop-sdk-java/releases). 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see
+the [releases on this repository](https://github.com/d-velop/dvelop-sdk-java/releases).
 
 ## License
 
